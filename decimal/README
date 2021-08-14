@@ -10,3 +10,7 @@ https://github.com/libdfp/libdfp
 Debian sources for constructing a Debian package
 
 https://salsa.debian.org/debian/libdfp.git
+
+We need explicit linking with this library for printf to work.
+
+https://stackoverflow.com/questions/11631161/force-to-link-against-unused-shared-library

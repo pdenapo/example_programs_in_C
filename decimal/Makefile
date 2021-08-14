@@ -1,5 +1,5 @@
 CC= gcc
-CFLAGS= -std=gnu99 -g  
+CFLAGS= -std=gnu99 -g -Wl,--no-as-needed -ldfp 
 SOURCES= example_decimal.c
 
 example_decimal:  $(SOURCES)
