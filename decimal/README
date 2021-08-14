@@ -1,0 +1,12 @@
+
+Taken from
+
+https://stackoverflow.com/questions/14924247/how-to-print-convert-decimal-floating-point-values-in-gcc
+
+This example requires libdfp
+
+https://github.com/libdfp/libdfp
+
+Debian sources for constructing a Debian package
+
+https://salsa.debian.org/debian/libdfp.git
