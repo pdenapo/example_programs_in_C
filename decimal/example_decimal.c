@@ -8,6 +8,8 @@
 int main()
 {
     _Decimal64 x = 0.10dd;
-    printf("%Df\n", x);
+    _Decimal64 y = 0.20dd;
+    _Decimal64 z = x+y;    
+    printf("%Df\n", z);
     return 0;
 }
