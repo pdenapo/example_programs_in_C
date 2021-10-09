@@ -1,7 +1,9 @@
-CC=gcc -std=c99 
+CC=gcc 
+SOURCES= ../linenoise/linenoise.c linenoise-minimal.c
+CFLAGS= -I ../linenoise
 
-linenoise-minimal:  linenoise-minimal.c
-	          $(CC) -L${PWD} -Wl,-rpath=${PWD}  linenoise-minimal.c -o linenoise-minimal   -llinenoise
+linenoise-minimal:  $(SOURCES)
+				$(CC) $(CFLAGS) $(SOURCES) -o linenoise-minimal $(CLIBS)
 
 clean:	
 		rm -f linenoise-minimal
