@@ -77,7 +77,8 @@ static duk_ret_t print_many(duk_context *ctx)
 {
   // Para debug podemos usar
   // duk_dump_context_stderr(ctx);
-  // El índice indica qué tipo de paràmetro necesita
+  // El índice indica el lugar y los distintos tipos de require qué tipo
+  // de paràmetro necesita esta función
   int times = duk_require_int(ctx, 0);
   const char *msg = duk_require_string(ctx, 1);
 
@@ -88,10 +89,35 @@ static duk_ret_t print_many(duk_context *ctx)
   return 0; // no return value (= undefined)
 }
 
+void completion(const char *buf, linenoiseCompletions *lc)
+{
+  if (buf[0] == 'a')
+  {
+    linenoiseAddCompletion(lc, "alert");
+    linenoiseAddCompletion(lc, "adder");
+  }
+  else if (buf[0] == 'l')
+  {
+    linenoiseAddCompletion(lc, "load");
+  }
+  else if (buf[0] == 'p')
+  {
+    linenoiseAddCompletion(lc, "print");
+    linenoiseAddCompletion(lc, "print_many");
+  }
+}
+
 int main(int argc, char *argv[])
 {
 
   linenoiseSetMultiLine(1);
+  /* Set the completion callback. This will be called every time the
+     * user uses the <tab> key. */
+  linenoiseSetCompletionCallback(&completion);
+
+  /* Load history from file. The history file is just a plain text file
+     * where entries are separated by newlines. */
+  linenoiseHistoryLoad("history.txt"); /* Load the history at startup */
 
   duk_context *ctx = duk_create_heap_default();
   if (!ctx)
@@ -121,6 +147,8 @@ int main(int argc, char *argv[])
     if (!line)
       break;
     linenoiseHistoryAdd(line);
+    linenoiseHistorySave("history.txt"); /* Save the history on disk. */
+
     int ret = duk_peval_string(ctx, line);
 
     if (ret != 0)
