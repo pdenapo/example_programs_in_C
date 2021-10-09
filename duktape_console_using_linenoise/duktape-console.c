@@ -5,6 +5,14 @@
 #include "duk_print_alert.h"
 #include <linenoise.h>
 
+// Función útil para debug. Estaba en la versión 1 pero la removieron por portabilidad.
+static void duk_dump_context_stderr(duk_context *ctx)
+{
+  duk_push_context_dump(ctx);
+  fprintf(stderr, "%s\n", duk_to_string(ctx, -1));
+  duk_pop(ctx);
+}
+
 static void push_file_as_string(duk_context *ctx, const char *filename)
 {
   FILE *f;
@@ -46,14 +54,31 @@ duk_ret_t load(duk_context *ctx)
   return run_script(ctx, file_name);
 }
 
+/* Adder: add argument values. */
+static duk_ret_t native_adder(duk_context *ctx)
+{
+  int i;
+  int n = duk_get_top(ctx); /* #args */
+  double res = 0.0;
+
+  for (i = 0; i < n; i++)
+  {
+    res += duk_to_number(ctx, i);
+  }
+
+  duk_push_number(ctx, res);
+  return 1; /* one return value */
+}
+
 // print the message many times, for example:
 // print_many(5,"hola")
 
 static duk_ret_t print_many(duk_context *ctx)
 {
+  // Para debug podemos usar
+  // duk_dump_context_stderr(ctx);
+  // El índice indica qué tipo de paràmetro necesita
   int times = duk_require_int(ctx, 0);
-  printf("times=%i \n", times);
-
   const char *msg = duk_require_string(ctx, 1);
 
   //const char *msg = "hola";
@@ -78,11 +103,16 @@ int main(int argc, char *argv[])
 
   // We register some functions in the global object to be used from javascript
 
+  // Command to load an script, ej. load("hello.js")
   duk_push_c_function(ctx, &load, 1 /*nargs*/);
   duk_put_global_string(ctx, "load");
 
-  duk_push_c_function(ctx, &print_many, 1 /*nargs*/);
+  duk_push_c_function(ctx, &print_many, 2 /*nargs*/);
   duk_put_global_string(ctx, "print_many");
+
+  // Example from the ducktape page
+  duk_push_c_function(ctx, native_adder, DUK_VARARGS);
+  duk_put_global_string(ctx, "adder");
 
   printf("Duktape console using linenoise\n");
   while (1)
