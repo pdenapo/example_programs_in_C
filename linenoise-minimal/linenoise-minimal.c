@@ -10,6 +10,7 @@ int main(int argc, char *argv[]) {
     char* line = linenoise (">");
 	  if (!line)
      	break; 	
+    linenoiseHistoryAdd(line);
     printf("%s \n",line);
     free(line);  
   }
