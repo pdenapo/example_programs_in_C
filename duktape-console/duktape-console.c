@@ -1,4 +1,5 @@
-/* test.c */
+// Ducktape Console- version using GNU-Readline
+
 #include <stdio.h>
 #include "duktape.h"
 #include "duk_print_alert.h"
@@ -13,7 +14,18 @@ int main(int argc, char *argv[]) {
     char* line = readline (">");
 	  if (!line)
      	break; 	
-    duk_eval_string(ctx, line);
+   	int ret = duk_peval_string(ctx, line);
+
+        if (ret != 0) {
+            printf("Error: %s \n ",duk_to_string(ctx, -1));
+        }
+        else {
+            if (!duk_is_undefined(ctx, -1))
+                printf("%s \n",duk_to_string(ctx, -1));
+        }
+        
+        duk_pop(ctx);
+    
   }
   duk_destroy_heap(ctx);
   return 0;
