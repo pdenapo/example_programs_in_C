@@ -82,7 +82,7 @@ static duk_ret_t print_many(duk_context *ctx)
   int times = duk_require_int(ctx, 0);
   const char *msg = duk_require_string(ctx, 1);
 
-  //const char *msg = "hola";
+  // const char *msg = "hola";
 
   for (int i = 0; i < times; i++)
     printf("%s \n", msg);
@@ -112,12 +112,13 @@ int main(int argc, char *argv[])
 
   linenoiseSetMultiLine(1);
   /* Set the completion callback. This will be called every time the
-     * user uses the <tab> key. */
+   * user uses the <tab> key. */
   linenoiseSetCompletionCallback(&completion);
 
   /* Load history from file. The history file is just a plain text file
-     * where entries are separated by newlines. */
+   * where entries are separated by newlines. */
   linenoiseHistoryLoad("history.txt"); /* Load the history at startup */
+  linenoiseHistorySetMaxLen(30);
 
   duk_context *ctx = duk_create_heap_default();
   if (!ctx)
