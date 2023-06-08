@@ -1,8 +1,11 @@
 add_rules("mode.debug", "mode.release")
+add_requires("readline")
 
 target("using_xmake")
     set_kind("binary")
     add_files("src/*.c")
+    add_syslinks("readline")
+
 
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
