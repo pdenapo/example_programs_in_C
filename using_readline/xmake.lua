@@ -3,7 +3,7 @@ add_requires("readline")
 
 target("using_xmake")
     set_kind("binary")
-    add_files("src/*.c")
+    add_files("./*.c")
     add_syslinks("readline")
 
 

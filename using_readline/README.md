@@ -1,0 +1,1 @@
+This project can be build with the traditional Makefile or using xmake.
