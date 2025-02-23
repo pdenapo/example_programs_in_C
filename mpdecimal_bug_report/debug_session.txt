@@ -1,0 +1,219 @@
+Reading symbols from ./prueba_mpdec...
+(gdb) break main
+Breakpoint 1 at 0x1191: file prueba_mpdec.c, line 4.
+(gdb) run
+Starting program: /home/pablo/proyectos/example_programs_in_C/mpdecimal_bug_report/prueba_mpdec 
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.archlinux.org>
+Enable debuginfod for this session? (y or [n]) y
+Debuginfod has been enabled.
+To make this setting permanent, add 'set debuginfod enabled on' to .gdbinit.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib/libthread_db.so.1".
+
+Breakpoint 1, main () at prueba_mpdec.c:4
+4	{
+(gdb) next
+7	    mpd_init(&ctx,128);
+(gdb) next
+12	  a= mpd_new(&ctx);
+(gdb) next
+13	  mpd_set_string(a, "?", &ctx);
+(gdb) step
+mpd_set_string (result=0x5555555592a0, s=0x555555556004 "?", 
+    ctx=0x7fffffffdb50)
+    at /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/mpsignal.c:119
+119	{
+(gdb) step
+120	    uint32_t status = 0;
+(gdb) step
+121	    mpd_qset_string(result, s, ctx, &status);
+(gdb) step
+Downloading 43.28 K source file /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/io.c
+mpd_qset_string (dec=0x5555555592a0, s=0x555555556004 "?", ctx=0x7fffffffdb50,  
+    status=0x7fffffffdb24)
+    at /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/io.c:200
+200	{
+(gdb) step
+207	    mpd_set_flags(dec, 0);
+(gdb) step
+Downloading 246.67 K source file /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/mpdecimal.c
+mpd_set_flags (flags=0 '\000', result=0x5555555592a0)                           
+    at /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/mpdecimal.c:734
+734	    result->flags &= (MPD_STATIC|MPD_DATAFLAGS);
+(gdb) step
+207	    mpd_set_flags(dec, 0);
+(gdb) step
+0x00007ffff7f7fb75 in mpd_set_flags (flags=0 '\000', result=0x5555555592a0)
+    at /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/mpdecimal.c:734
+734	    result->flags &= (MPD_STATIC|MPD_DATAFLAGS);
+(gdb) step
+735	    result->flags |= flags;
+(gdb) step
+mpd_qset_string (dec=0x5555555592a0, s=0x555555556004 "?", ctx=0x7fffffffdb50, 
+    status=0x7fffffffdb24)
+    at /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/io.c:212
+212	    if (*s == '+') {
+(gdb) step
+215	    else if (*s == '-') {
+(gdb) step
+64	    while (--n != SIZE_MAX) {
+(gdb) step
+221	    if (_mpd_strneq(s, "nan", "NAN", 3)) { /* NaN */
+(gdb) step
+0x00007ffff7f7fb9d in _mpd_strneq (n=2, u=0x7ffff7f83d4f "NAN", 
+    l=0x7ffff7f83d4a "nan", s=0x555555556004 "?")
+    at /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/io.c:65
+65	        if (*s != *l && *s != *u) {
+(gdb) step
+237	    else if (_mpd_strneq(s, "snan", "SNAN", 4)) {
+(gdb) step
+0x00007ffff7f7fcb0 in _mpd_strneq (n=<optimized out>, u=0x7ffff7f83d4e "SNAN", 
+    l=0x7ffff7f83d49 "snan", s=0x555555556004 "?")
+    at /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/io.c:205
+205	    uint8_t sign = MPD_POS;
+(gdb) step
+263	        if ((coeff = scan_dpoint_exp(s, &dpoint, &exp, &end)) == NULL)
+(gdb) step
+0x00007ffff7f7feb0 in scan_dpoint_exp (end=<optimized out>, 
+    exp=<optimized out>, dpoint=<optimized out>, s=0x555555556004 "?")
+    at /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/io.c:140
+140	    *dpoint = NULL;
+(gdb) step
+Downloading 2.10 K source file /usr/src/debug/glibc/glibc/ctype/../include/ctype.h
+__ctype_b_loc () at ../include/ctype.h:40                                       
+40	{
+(gdb) step
+41	  return __libc_tsd_address (const uint16_t *, CTYPE_B);
+(gdb) step
+mpd_qset_string (dec=0x5555555592a0, s=<optimized out>, ctx=0x7fffffffdb50, 
+    status=0x7fffffffdb24)
+    at /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/io.c:325
+325	    mpd_seterror(dec, MPD_Conversion_syntax, status);
+(gdb) step
+mpd_seterror (result=0x5555555592a0, flags=2, status=0x7fffffffdb24)
+    at /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/mpdecimal.c:1087
+1087	{
+(gdb) step
+1088	    mpd_minalloc(result);
+(gdb) step
+mpd_minalloc (result=0x5555555592a0)
+    at /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/mpdecimal.c:577
+577	    if (!mpd_isstatic_data(result) && result->alloc > MPD_MINALLOC) {
+(gdb) step
+mpd_isstatic_data (dec=0x5555555592a0)
+    at /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/mpdecimal.c:572
+572	mpd_minalloc(mpd_t *result)
+(gdb) step
+572	mpd_minalloc(mpd_t *result)
+(gdb) step
+mpd_minalloc (result=0x5555555592a0)
+    at /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/mpdecimal.c:572
+572	mpd_minalloc(mpd_t *result)
+(gdb) step
+mpd_seterror (result=0x5555555592a0, flags=2, status=0x7fffffffdb24)
+    at /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/mpdecimal.c:1090
+1090	    mpd_set_positive(result);
+(gdb) step
+mpd_set_positive (result=0x5555555592a0)
+    at /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/mpdecimal.c:675
+675	    result->flags &= ~MPD_NEG;
+(gdb) step
+1090	    mpd_set_positive(result);
+(gdb) step
+0x00007ffff7f68ade in mpd_set_positive (result=0x5555555592a0)
+    at /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/mpdecimal.c:675
+675	    result->flags &= ~MPD_NEG;
+(gdb) step
+1090	    mpd_set_positive(result);
+(gdb) step
+0x00007ffff7f68ae5 in mpd_set_positive (result=0x5555555592a0)
+    at /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/mpdecimal.c:675
+675	    result->flags &= ~MPD_NEG;
+(gdb) step
+mpd_seterror (result=0x5555555592a0, flags=2, status=0x7fffffffdb24)
+    at /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/mpdecimal.c:1092
+1092	    *status |= flags;
+(gdb) step
+mpd_set_string (result=<optimized out>, s=<optimized out>, ctx=0x7fffffffdb50)
+    at /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/mpsignal.c:122
+122	    mpd_addstatus_raise(ctx, status);
+(gdb) step
+Downloading 5.91 K source file /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/context.c
+mpd_addstatus_raise (ctx=0x7fffffffdb50, flags=2)                               
+    at /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/context.c:279
+279	{
+(gdb) step
+280	    ctx->status |= flags;
+(gdb) step
+281	    if (flags&ctx->traps) {
+(gdb) step
+282	        ctx->newtrap = (flags&ctx->traps);
+(gdb) step
+283	        mpd_traphandler(ctx);
+(gdb) step
+mpd_dflt_traphandler (ctx=0x7fffffffdb50)
+    at /usr/src/debug/mpdecimal/mpdecimal-4.0.0/libmpdec/context.c:37
+37	{
+(gdb) step
+39	    raise(SIGFPE);
+(gdb) step
+Downloading 1.07 K source file /usr/src/debug/glibc/glibc/signal/../sysdeps/posix/raise.c
+__GI_raise (sig=8) at ../sysdeps/posix/raise.c:25                               
+25	{
+(gdb) step
+26	  int ret = __pthread_kill (__pthread_self (), sig);
+(gdb) step
+Downloading 975.00 B source file /usr/src/debug/glibc/glibc/nptl/pthread_self.c
+__GI___pthread_self () at pthread_self.c:23                                     
+23	{
+(gdb) step
+24	  return (pthread_t) THREAD_SELF;
+(gdb) step
+__GI___pthread_kill (threadid=140737350395712, signo=signo@entry=8)
+    at pthread_kill.c:94
+94	{
+(gdb) step
+97	  if (is_internal_signal (signo))
+(gdb) step
+Downloading 3.36 K source file /usr/src/debug/glibc/glibc/nptl/../sysdeps/unix/sysv/linux/internal-signals.h
+is_internal_signal (sig=<optimized out>)                                        
+    at ../sysdeps/unix/sysv/linux/internal-signals.h:53
+53	  return (sig == SIGCANCEL) || (sig == SIGSETXID);
+(gdb) step
+100	  return __pthread_kill_internal (threadid, signo);
+(gdb) step
+__pthread_kill_internal (threadid=140737350395712, signo=8)
+    at pthread_kill.c:89
+89	  return __pthread_kill_implementation (threadid, signo, 0);
+(gdb) step
+__pthread_kill_implementation (threadid=140737350395712, signo=signo@entry=8, 
+    no_tid=no_tid@entry=0) at pthread_kill.c:29
+29	{
+(gdb) step
+31	  if (pd == THREAD_SELF)
+(gdb) step
+42	      pid_t tid = INTERNAL_SYSCALL_CALL (gettid);
+(gdb) step
+43	      int ret = INTERNAL_SYSCALL_CALL (tgkill, __getpid (), tid, signo);
+(gdb) step
+Downloading 4.80 K source file /usr/src/debug/glibc/glibc/posix/../sysdeps/unix/syscall-template.S
+__GI_getpid () at ../sysdeps/unix/syscall-template.S:91                         
+91	T_PSEUDO_NOERRNO (SYSCALL_SYMBOL, SYSCALL_NAME, SYSCALL_NARGS)
+(gdb) step
+93		ret_NOERRNO
+(gdb) step
+__pthread_kill_implementation (threadid=<optimized out>, signo=signo@entry=8, 
+    no_tid=no_tid@entry=0) at pthread_kill.c:44
+44	      return INTERNAL_SYSCALL_ERROR_P (ret) ? INTERNAL_SYSCALL_ERRNO (ret) : 0;
+(gdb) step
+
+Program received signal SIGFPE, Arithmetic exception.
+__pthread_kill_implementation (threadid=<optimized out>, signo=signo@entry=8, 
+    no_tid=no_tid@entry=0) at pthread_kill.c:44
+44	      return INTERNAL_SYSCALL_ERROR_P (ret) ? INTERNAL_SYSCALL_ERRNO (ret) : 0;
+(gdb) step
+
+Program terminated with signal SIGFPE, Arithmetic exception.
+The program no longer exists.
